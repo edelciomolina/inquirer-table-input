@@ -13,18 +13,19 @@ inquirer
       //editKey: 'f2',
       infoKeys: `\n- Use ARROWS to move cells\n- Type into ${chalk.bgYellow.bold(
         " Yellow "
-      )} fields to edit.\n- Press ENTER to confirm.\n- Press ESC to cancel.`,
+      )} fields to edit\n- Press ENTER to confirm\n- Press ESC to cancel`,
       hideInfoKeysWhenKeyPressed: true,
       freezeColumns: 0,
       columns: [
         { name: "NF Number", value: "nf" },
         { name: "Customer", value: "customer" },
+        { name: "City", value: "city" },
         { name: "Quantity", value: "quantity", editable: "number" },
         { name: "Pricing", value: "pricing", editable: "decimal" }
       ],
       rows: [
-        ["8288", "Shinji Masumoto", 1, 68.03],
-        ["8289", "João da Silva", 4, 125.85]
+        ["8288", "Shinji Masumoto", "Chicago", 1, 68.03],
+        ["8289", "João da Silva", "New York", 4, 125.85]
       ],
       validate: () => false
     }
