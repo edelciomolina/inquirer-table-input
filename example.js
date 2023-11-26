@@ -9,13 +9,11 @@ inquirer
     {
       type: "table-input",
       name: "edit-pricing",
-      message: "Edit the pricing",
+      message: "PRICING",
       //editKey: 'f2',
-      infoKeys: `(Press ${chalk.cyan.bold(
-        "<space>"
-      )} to select, ${chalk.cyan.bold(
-        "<Up and Down>"
-      )} to move rows, ${chalk.cyan.bold("<Left and Right>")} to move columns)`,
+      infoKeys: `\n- Use ARROWS to move cells\n- Type into ${chalk.bgYellow.bold(
+        " Yellow "
+      )} fields to edit.\n- Press ENTER to confirm.\n- Press ESC to cancel.`,
       hideInfoKeysWhenKeyPressed: true,
       freezeColumns: 0,
       columns: [
