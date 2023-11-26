@@ -10,22 +10,32 @@ inquirer
       type: "table-input",
       name: "edit-pricing",
       message: "PRICING",
-      //editKey: 'f2',
-      infoKeys: `\n- Use ARROWS to move cells\n- Type into ${chalk.bgYellow.bold(
-        " Yellow "
-      )} fields to edit\n- Press ENTER to confirm\n- Press ESC to cancel`,
-      hideInfoKeysWhenKeyPressed: true,
-      freezeColumns: 0,
+      infoMessage: `Navigate and Edit`,
+      hideInfoWhenKeyPressed: true,
+      freezeColumns: 1,
+      decimalPoint: ".",
+      decimalPlaces: 2,
+      selectedColor: chalk.yellow,
+      editableColor: chalk.bgYellow.bold,
+      editingColor: chalk.bgGreen.bold,
       columns: [
-        { name: "NF Number", value: "nf" },
-        { name: "Customer", value: "customer" },
-        { name: "City", value: "city" },
-        { name: "Quantity", value: "quantity", editable: "number" },
-        { name: "Pricing", value: "pricing", editable: "decimal" }
+        { name: chalk.cyan.bold("NF Number"), value: "nf" },
+        { name: chalk.cyan.bold("Customer"), value: "customer" },
+        { name: chalk.cyan.bold("City"), value: "city", editable: "text" },
+        {
+          name: chalk.cyan.bold("Quantity"),
+          value: "quantity",
+          editable: "number"
+        },
+        {
+          name: chalk.cyan.bold("Pricing"),
+          value: "pricing",
+          editable: "decimal"
+        }
       ],
       rows: [
-        ["8288", "Shinji Masumoto", "Chicago", 1, 68.03],
-        ["8289", "João da Silva", "New York", 4, 125.85]
+        [chalk.bold("8288"), "Shinji Masumoto", "Chicago", 1, 68.03],
+        [chalk.bold("8289"), "Arnold Mcfee", "New York", 4, 125.85]
       ],
       validate: () => false
     }

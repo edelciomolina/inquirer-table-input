@@ -19,9 +19,24 @@ class TableInput extends Base {
   constructor(questions, rl, answers) {
     super(questions, rl, answers);
 
-    this.opt.freezeColumns = this.opt.freezeColumns || 1;
+    // private variables
+    this.showInfo = true;
     this.columns = new Choices(this.opt.columns, []);
     this.pointer = 0;
+    this.nextEscapeWillClose = false;
+
+    // parameters
+    this.opt.escapeMessage =
+      this.opt.escapeMessage || chalk.red("Press ESC again to exit!");
+    this.opt.confirmMessage =
+      this.opt.confirmMessage || chalk.green("Press ENTER again to confirm!");
+    this.opt.hideInfoWhenKeyPressed = this.opt.hideInfoWhenKeyPressed || false;
+    this.opt.decimalPoint = this.opt.decimalPoint || ".";
+    this.opt.decimalPlaces = this.opt.decimalPlaces || 2;
+    this.opt.freezeColumns = this.opt.freezeColumns || 0;
+    this.selectedColor = this.opt.selectedColor || chalk.yellow;
+    this.editableColor = this.opt.editableColor || chalk.bgYellow;
+    this.editingColor = this.opt.editingColor || chalk.bgBlue;
     this.horizontalPointer = this.opt.freezeColumns;
     this.rows = new Choices(this.opt.rows, []);
     this.values = this.columns.filter(() => true).map(() => undefined);
@@ -46,6 +61,10 @@ class TableInput extends Base {
     validation.error.forEach(this.onError.bind(this));
 
     events.keypress.forEach(({ key }) => {
+      if (this.opt.hideInfoWhenKeyPressed) this.showInfo = false;
+      if (key.name !== "escape") this.nextEscapeWillClose = false;
+      this.nextEnterWillConfirm = false;
+
       if (!this.editingMode) {
         switch (key.name) {
           case "down":
@@ -61,11 +80,19 @@ class TableInput extends Base {
             return this.onRightKey();
 
           case "escape":
-            return this.render(chalk.green("Press ESC again to exit!"));
+            if (!this.nextEscapeWillClose) {
+              this.nextEscapeWillClose = true;
+              return this.render(this.opt.escapeMessage);
+            } else {
+              this.render();
+              return validation.error();
+            }
 
           default:
-            this.onEditKey();
-            this.onEditPress(key);
+            if (this.columns.get(this.horizontalPointer).editable) {
+              this.updateEditing();
+              this.onEditPress(key);
+            }
         }
       } else {
         return this.onEditPress(key);
@@ -97,7 +124,6 @@ class TableInput extends Base {
 
   onEnd(state) {
     this.status = "answered";
-    this.spaceKeyPressed = true;
 
     this.render();
 
@@ -106,10 +132,33 @@ class TableInput extends Base {
     this.done(state.value);
   }
 
+  formatCell() {
+    if (this.editingType === "number") {
+      this.rows.choices[this.pointer][this.horizontalPointer] = parseInt(
+        this.rows.choices[this.pointer][this.horizontalPointer] || 0
+      );
+    }
+
+    if (this.editingType === "decimal") {
+      this.rows.choices[this.pointer][this.horizontalPointer] = parseFloat(
+        this.rows.choices[this.pointer][this.horizontalPointer] || 0
+      ).toFixed(this.opt.decimalPlaces);
+    }
+  }
+
   onError(state) {
     if (this.editingMode) {
       this.editingMode = false;
+      this.formatCell();
       this.render();
+    } else {
+      if (!this.nextEnterWillConfirm) {
+        this.nextEnterWillConfirm = true;
+        return this.render(this.opt.confirmMessage);
+      } else {
+        this.render();
+        return validation.success();
+      }
     }
   }
 
@@ -134,12 +183,12 @@ class TableInput extends Base {
   }
 
   onEditPress(key) {
-    const mode = this.columns
+    this.editingType = this.columns
       .get(this.horizontalPointer)
       .editable.toLowerCase();
-    const isNumber = /^[0-9]$/.test(key.name);
-    const isText = /^[a-zA-Z0-9\s]$/.test(key.name);
-    const isDecimal = /^[0-9.]$/.test(key.name);
+    this.isNumber = /^[0-9]$/.test(key.name);
+    this.isText = /^[a-zA-Z0-9\s]$/.test(key.sequence);
+    this.isDecimal = /^[0-9\,\.]$/.test(key.sequence);
 
     // Exemplo: Adicione o caractere pressionado à sua escolha atual
     let value = this.rows.choices[this.pointer][this.horizontalPointer];
@@ -156,33 +205,62 @@ class TableInput extends Base {
           this.horizontalPointer
         ] = this.valueBeforeEditing;
         this.render();
-        return this.onEditKey();
+        return this.updateEditing();
+      }
+      case "delete": {
+        this.rows.choices[this.pointer][this.horizontalPointer] = "";
+        this.formatCell();
+        return this.updateEditing();
       }
       case "backspace": {
-        const value = this.rows.choices[this.pointer][this.horizontalPointer];
-        if (value.length > 0) {
-          this.rows.choices[this.pointer][this.horizontalPointer] = value.slice(
-            0,
-            -1
-          );
-          this.render();
+        let value = this.rows.choices[this.pointer][
+          this.horizontalPointer
+        ].toString();
+        this.rows.choices[this.pointer][this.horizontalPointer] = value.slice(
+          0,
+          -1
+        );
+
+        value = this.rows.choices[this.pointer][
+          this.horizontalPointer
+        ].toString();
+        if (value.length === 0) {
+          this.formatCell();
+          this.updateEditing();
         }
+
+        this.render();
       }
       default: {
-        if (isNumber && mode === "number") {
+        if (this.isNumber && this.editingType === "number") {
           this.rows.choices[this.pointer][this.horizontalPointer] =
             value + key.name;
           this.render();
         }
-        if (isText && mode === "text") {
+
+        if (this.isText && this.editingType === "text") {
           this.rows.choices[this.pointer][this.horizontalPointer] =
-            value + key.name;
+            value + key.sequence;
           this.render();
         }
-        if (isDecimal && mode === "decimal") {
-          this.rows.choices[this.pointer][this.horizontalPointer] =
-            value + key.name;
-          this.render();
+        if (this.isDecimal && this.editingType === "decimal") {
+          const existDecimalPoint =
+            value.indexOf(".") >= 0 || value.indexOf(",") >= 0;
+          const decimalPointPressed =
+            key.sequence.indexOf(".") >= 0 || key.sequence.indexOf(",") >= 0;
+
+          const keyAccepted =
+            !decimalPointPressed || (!existDecimalPoint && decimalPointPressed);
+
+          if (keyAccepted) {
+            this.rows.choices[this.pointer][this.horizontalPointer] =
+              value +
+              key.sequence
+                .replace(".", this.opt.decimalPoint)
+                .replace(",", this.opt.decimalPoint);
+
+            this.render();
+          }
         }
 
         return false;
@@ -190,7 +268,7 @@ class TableInput extends Base {
     }
   }
 
-  onEditKey() {
+  updateEditing() {
     const isEditable = this.columns.get(this.horizontalPointer).editable;
 
     if (isEditable) {
@@ -200,28 +278,9 @@ class TableInput extends Base {
     }
   }
 
-  onSpaceKey() {
-    const value = this.columns.get(this.horizontalPointer).value;
-
-    this.values[this.pointer] = value;
-    this.spaceKeyPressed = true;
-    this.render();
-  }
-
   onUpKey() {
     this.pointer = this.pointer > 0 ? this.pointer - 1 : this.pointer;
     this.render();
-  }
-
-  async inputAlert(message) {
-    const answers = await inquirer.prompt([
-      {
-        type: "input",
-        name: "inputValue",
-        message: message
-      }
-    ]);
-    return answers.inputValue;
   }
 
   paginate() {
@@ -240,13 +299,13 @@ class TableInput extends Base {
     let content = this.getQuestion();
     let bottomContent = "";
 
-    if (!this.spaceKeyPressed && this.opt.hideInfoKeysWhenKeyPressed) {
-      content += this.opt.infoKeys;
+    if (this.showInfo) {
+      content += this.opt.infoMessage;
     }
 
     const [firstIndex, lastIndex] = this.paginate();
     const table = new Table({
-      head: this.columns.pluck("name").map(name => chalk.cyan.bold(name))
+      head: this.columns.pluck("name").map(name => name)
     });
 
     this.rows.forEach((row, rowIndex) => {
@@ -263,11 +322,6 @@ class TableInput extends Base {
         const isSelected =
           this.pointer === rowIndex && this.horizontalPointer === columnIndex;
 
-        // const value =
-        //     column.value === this.values[rowIndex]
-        //         ? figures.radioOn
-        //         : figures.radioOff;
-
         const cellValue = this.rows.realChoices[rowIndex][columnIndex];
 
         const value = editable ? ` ${cellValue} ` : cellValue;
@@ -276,29 +330,22 @@ class TableInput extends Base {
           columnValues.push(
             isSelected
               ? editable
-                ? chalk.bgGreen.white.bold(value)
-                : chalk.yellow(value)
+                ? this.editingColor(value)
+                : this.selectedColor(value)
               : value
           );
         } else {
           columnValues.push(
             isSelected
               ? editable
-                ? chalk.bgYellowBright.whiteBright.bold(value)
-                : chalk.yellow(value)
+                ? this.editableColor(value)
+                : this.selectedColor(value)
               : value
           );
         }
       });
 
-      const chalkModifier =
-        this.status !== "answered" && this.pointer === rowIndex
-          ? chalk.reset.cyan
-          : chalk.reset;
-
-      table.push({
-        [chalkModifier(row[0])]: columnValues.slice(1)
-      });
+      table.push(columnValues);
     });
 
     content += "\n\n" + table.toString();
