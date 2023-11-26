@@ -1,0 +1,47 @@
+{
+  "name": "inquirer-table-input",
+  "version": "0.0.1",
+  "description": "A table input for Inquirer",
+  "main": "index.js",
+  "dependencies": {
+    "chalk": "^3.0.0", 
+    "cli-cursor": "^3.1.0",
+    "cli-table": "^0.3.1", 
+    "inquirer": "^7.0.3"
+  },
+  "devDependencies": {
+    "husky": "^4.0.0",
+    "lint-staged": "^9.5.0",
+    "prettier": "^1.19.1"
+  },
+  "scripts": {
+    "test": "npm run format",
+    "format": "prettier --write \"./**/*.{js,jsx,md,html}\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/edelciomolina/inquirer-table-input.git"
+  },
+  "keywords": [
+    "inquirer",
+    "cli",
+    "input"
+  ],
+  "author": "Edelcio Molina <edelciomolina@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/edelciomolina/inquirer-table-input/issues"
+  },
+  "homepage": "https://github.com/edelciomolina/inquirer-table-input#readme",
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,jsx,md,html}": [
+      "npm run format",
+      "git add"
+    ]
+  }
+}
