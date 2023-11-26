@@ -19,7 +19,6 @@ class TableInput extends Base {
   constructor(questions, rl, answers) {
     super(questions, rl, answers);
 
-    this.opt.editKey = this.opt.editKey?.toLowerCase();
     this.opt.freezeColumns = this.opt.freezeColumns || 1;
     this.columns = new Choices(this.opt.columns, []);
     this.pointer = 0;
@@ -108,7 +107,10 @@ class TableInput extends Base {
   }
 
   onError(state) {
-    return this.onEditKey();
+    if (this.editingMode) {
+      this.editingMode = false;
+      this.render();
+    }
   }
 
   onLeftKey() {
@@ -165,9 +167,6 @@ class TableInput extends Base {
           );
           this.render();
         }
-      }
-      case this.opt.editKey: {
-        return this.onEditKey();
       }
       default: {
         if (isNumber && mode === "number") {
