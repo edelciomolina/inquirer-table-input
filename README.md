@@ -1,6 +1,6 @@
 # inquirer-table-input [![npm version](https://badge.fury.io/js/inquirer-table-input.svg)](https://badge.fury.io/js/inquirer-table-input)
 
-> An editing table prompt for [Inquirer.js](https://github.com/SBoudrias/Inquirer.js)
+> An editing table prompt for [Inquirer.js](https://www.npmjs.com/package/inquirer)
 
 ![Screen capture of the table input](screen-capture.gif)
 
