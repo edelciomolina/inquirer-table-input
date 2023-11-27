@@ -92,22 +92,22 @@ The result will be an array, containing the value for each row.
 
 ### Options
 
-- `infoMessage` _(Optional)_ A message that will appear after the <kbd>message</kbd> argument.
-- `hideInfoWhenKeyPressed` _(Default: **false**)_ The <kbd>infoMessage</kbd> disappears after any key is pressed.
-- `freezeColumns` _(Default: **0**)_ The number of frozen columns, preventing navigation and editing of them.
-- `decimalPoint` _(Default: **'.'**)_ The decimal point used to represent editable columns of the "decimal" type.
-- `decimalPlaces` _(Default: **2**)_ The decimal places used to represent editable columns of the "decimal" type.
-- `selectedColor` _(Default: **chalk.yellow**)_ The color used to represent the currently selected cell.
-- `editableColor` _(Default: **chalk.bgYellow.bold**)_ The color used to represent when a selected cell can be edited.
-- `editingColor` _(Default: **chalk.bgGreen.bold**)_ The color used to represent when a cell is being edited.
-- `escapeMessage` _(Default: **chalk.red("Press ESC again to exit!")**)_ Alert message that will appear when the user tries to cancel by pressing the ESC key.
-- `confirmMessage` _(Default: **chalk.green("Press ENTER again to confirm!")**)_ Alert message that will appear when the user tries to confirm by pressing the ENTER key.
+- `infoMessage`  <kbd>_(Optional)_</kbd> A message that will appear after the <kbd>message</kbd> argument.
+- `hideInfoWhenKeyPressed` <kbd>_(Default: **false**)_</kbd> The <kbd>infoMessage</kbd> disappears after any key is pressed.
+- `freezeColumns`  <kbd>_(Default: **0**)_</kbd> The number of frozen columns, preventing navigation and editing of them.
+- `decimalPoint`  <kbd>_(Default: **'.'**)_</kbd> The decimal point used to represent editable columns of the "decimal" type.
+- `decimalPlaces`  <kbd>_(Default: **2**)_</kbd> The decimal places used to represent editable columns of the "decimal" type.
+- `selectedColor` <kbd> _(Default: **chalk.yellow**)_</kbd> The color used to represent the currently selected cell.
+- `editableColor`  <kbd>_(Default: **chalk.bgYellow.bold**)_</kbd> The color used to represent when a selected cell can be edited.
+- `editingColor`  <kbd>_(Default: **chalk.bgGreen.bold**)_</kbd> The color used to represent when a cell is being edited.
+- `escapeMessage`  <kbd>_(Default: **chalk.red("Press ESC again to exit!")**)_</kbd> Alert message that will appear when the user tries to cancel by pressing the ESC key.
+- `confirmMessage`  <kbd>_(Default: **chalk.green("Press ENTER again to confirm!")**)_</kbd> Alert message that will appear when the user tries to confirm by pressing the ENTER key.
 - `columns` A array of objects that represent the columns of your table.
   - `name` The title that will represent the column (the one visible to the user).
   - `value` The name of the columns (Used to structure the result of the Inquirer response.)
-  - `editable` _(Optional)_ When used, it determines the type of the field to be edited, with options including "**text**", "**number**", and "**decimal**."
+  - `editable`  <kbd>_(Optional)_</kbd> When used, it determines the type of the field to be edited, with options including "**text**", "**number**", and "**decimal**."
 - `columns` A array of values that represent the items of your table. The size of each array should represent the same number of columns in your table.
 
 ### Acknowledgments
 
-Thanks to [Eduardo Boucas](https://github.com/eduardoboucas), creator of [inquirer-table-prompt](https://github.com/eduardoboucas/inquirer-table-prompt), which inspired me to create this project.
+Thanks to [Eduardo Bouças](https://github.com/eduardoboucas), creator of [inquirer-table-prompt](https://github.com/eduardoboucas/inquirer-table-prompt), which inspired me to create this project.
