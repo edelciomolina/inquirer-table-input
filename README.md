@@ -92,20 +92,20 @@ The result will be an array, containing the value for each row.
 
 ### Options
 
-- `infoMessage`  <kbd>_(Optional)_</kbd> A message that will appear after the <kbd>message</kbd> argument.
-- `hideInfoWhenKeyPressed` <kbd>_(Default: **false**)_</kbd> The <kbd>infoMessage</kbd> disappears after any key is pressed.
-- `freezeColumns`  <kbd>_(Default: **0**)_</kbd> The number of frozen columns, preventing navigation and editing of them.
-- `decimalPoint`  <kbd>_(Default: **'.'**)_</kbd> The decimal point used to represent editable columns of the "decimal" type.
-- `decimalPlaces`  <kbd>_(Default: **2**)_</kbd> The decimal places used to represent editable columns of the "decimal" type.
-- `selectedColor` <kbd> _(Default: **chalk.yellow**)_</kbd> The color used to represent the currently selected cell.
-- `editableColor`  <kbd>_(Default: **chalk.bgYellow.bold**)_</kbd> The color used to represent when a selected cell can be edited.
-- `editingColor`  <kbd>_(Default: **chalk.bgGreen.bold**)_</kbd> The color used to represent when a cell is being edited.
-- `escapeMessage`  <kbd>_(Default: **chalk.red("Press ESC again to exit!")**)_</kbd> Alert message that will appear when the user tries to cancel by pressing the ESC key.
-- `confirmMessage`  <kbd>_(Default: **chalk.green("Press ENTER again to confirm!")**)_</kbd> Alert message that will appear when the user tries to confirm by pressing the ENTER key.
+- `infoMessage`  <kbd>_Optional_</kbd> A message that will appear after the <kbd>message</kbd> argument.
+- `hideInfoWhenKeyPressed` <kbd>_Default: **false**_</kbd> The <kbd>infoMessage</kbd> disappears after any key is pressed.
+- `freezeColumns`  <kbd>_Default: **0**_</kbd> The number of frozen columns, preventing navigation and editing of them.
+- `decimalPoint`  <kbd>_Default: **'.'**_</kbd> The decimal point used to represent editable columns of the "decimal" type.
+- `decimalPlaces`  <kbd>_Default: **2**_</kbd> The decimal places used to represent editable columns of the "decimal" type.
+- `selectedColor` <kbd>_Default: **chalk.yellow**_</kbd> The color used to represent the currently selected cell.
+- `editableColor`  <kbd>_Default: **chalk.bgYellow.bold**_</kbd> The color used to represent when a selected cell can be edited.
+- `editingColor`  <kbd>_Default: **chalk.bgGreen.bold**_</kbd> The color used to represent when a cell is being edited.
+- `escapeMessage`  <kbd>_Default: **chalk.red("Press ESC again to exit!")**_</kbd> Alert message that will appear when the user tries to cancel by pressing the ESC key.
+- `confirmMessage`  <kbd>_Default: **chalk.green("Press ENTER again to confirm!")**_</kbd> Alert message that will appear when the user tries to confirm by pressing the ENTER key.
 - `columns` A array of objects that represent the columns of your table.
   - `name` The title that will represent the column (the one visible to the user).
   - `value` The name of the columns (Used to structure the result of the Inquirer response.)
-  - `editable`  <kbd>_(Optional)_</kbd> When used, it determines the type of the field to be edited, with options including "**text**", "**number**", and "**decimal**."
+  - `editable`  <kbd>_Optional_</kbd> When used, it determines the type of the field to be edited, with options including "**text**", "**number**", and "**decimal**."
 - `columns` A array of values that represent the items of your table. The size of each array should represent the same number of columns in your table.
 
 ### Acknowledgments
