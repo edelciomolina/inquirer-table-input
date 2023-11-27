@@ -31,6 +31,7 @@ class TableInput extends Base {
     this.opt.confirmMessage =
       this.opt.confirmMessage || chalk.green("Press ENTER again to confirm!");
     this.opt.hideInfoWhenKeyPressed = this.opt.hideInfoWhenKeyPressed || false;
+    this.opt.infoMessage = this.opt.infoMessage || "";
     this.opt.decimalPoint = this.opt.decimalPoint || ".";
     this.opt.decimalPlaces = this.opt.decimalPlaces || 2;
     this.opt.freezeColumns = this.opt.freezeColumns || 0;
@@ -85,7 +86,7 @@ class TableInput extends Base {
               return this.render(this.opt.escapeMessage);
             } else {
               this.render();
-              return validation.error();
+              return this.onEnd(false);
             }
 
           default:
@@ -124,12 +125,27 @@ class TableInput extends Base {
 
   onEnd(state) {
     this.status = "answered";
-
-    this.render();
-
     this.screen.done();
     cliCursor.show();
-    this.done(state.value);
+
+    if (state) {
+      return this.done({
+        state,
+        result: this.rows.choices.map(row => {
+          const rowData = {};
+          this.columns.choices.forEach((column, index) => {
+            rowData[column.value] = row[index]
+              .toString()
+              .replace(/\u001b\[[0-9;]*m/g, "");
+          });
+          return rowData;
+        })
+      });
+    } else {
+      return this.done({
+        state
+      });
+    }
   }
 
   formatCell() {
@@ -157,7 +173,7 @@ class TableInput extends Base {
         return this.render(this.opt.confirmMessage);
       } else {
         this.render();
-        return validation.success();
+        return this.onEnd(true);
       }
     }
   }

@@ -8,7 +8,7 @@ inquirer
   .prompt([
     {
       type: "table-input",
-      name: "edit-pricing",
+      name: "pricing",
       message: "PRICING",
       infoMessage: `Navigate and Edit`,
       hideInfoWhenKeyPressed: true,
