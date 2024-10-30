@@ -110,4 +110,4 @@ The result will be an array, containing the value for each row.
 
 ### Acknowledgments
 
-Thanks to [Eduardo Bouças](https://github.com/eduardoboucas), creator of [inquirer-table-prompt](https://github.com/eduardoboucas/inquirer-table-prompt), which inspired me to create this project.
+Thanks to [Eduardo Bouças](https://github.com/eduardoboucas), creator of [inquirer-table-prompt](https://github.com/eduardoboucas/inquirer-table-prompt), which inspired me to create this project and [Leandro Simões](https://github.com/leandrosimoes), who introduced me to Inquirer!
